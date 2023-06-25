@@ -4,6 +4,7 @@ import { Actions, State} from '../store';
 import { FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from  '@ngneat/until-destroy';
+import { RadioStation } from '../models';
 
 
 @UntilDestroy()
@@ -18,10 +19,10 @@ import { UntilDestroy, untilDestroyed } from  '@ngneat/until-destroy';
     <input type="number" id="from" formControlName="from" 
        min="0" [max]="store().radioCountries.length > 10 ? store().radioCountries.length - 10 : 0" s>
     </form>
-    <table><tbody>
+    <table width="50%"><tbody>
       <tr><th>Name</th><th>Count</th></tr>
       <tr *ngFor="let country of store().radioCountries">
-      <td><button (click)="showRadionStations(country.name)">{{country.name}}</button></td>
+      <td><button class="text-blue-400" (click)="showRadionStations(country.name)">{{country.name}}</button></td>
       <td>{{country.stationcount}}</td>
     </tbody></table>
 
@@ -29,11 +30,12 @@ import { UntilDestroy, untilDestroyed } from  '@ngneat/until-destroy';
       <h1>Stations {{store().radioStations[0].country}}</h1>
 
       <table width="100%"><tbody>
-        <tr><th width="50%">Name</th><th width="30%">State</th><th width="20%">Icon</th></tr>
-        <tr *ngFor="let station of store().radioStations">
+        <tr ><th width="50%">Name</th><th width="30%">State</th><th width="20%">Icon</th></tr>
+        <tr  height="100px" *ngFor="let station of store().radioStations">
         <td><a class="text-blue-400" href="{{station.homepage}}" target="_blank">{{station.name}}</a></td>
         <td>{{station.state}}</td>
-        <td><img src="{{station.favicon}}" width="100" height="100"/></td>
+        <td><a href="{{station.urlcache}}"><img  *ngIf="hasFavicon(station)"  src="{{station.favicon}}" width="100" height="100" onerror="this.style.display='none'"/></a></td>
+        </tr>
       </tbody></table>
   </div>
   `,
@@ -67,5 +69,10 @@ export class RadioComponent {
 
   async showRadionStations(country: string) {
       await this._actionsService.fetchRadioStations(country);
+  }
+
+  hasFavicon(station: RadioStation) : boolean {
+    console.log("Favicon"+station?.favicon)
+    return station?.favicon?.trim().length > 0;
   }
 }

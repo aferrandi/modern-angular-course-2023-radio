@@ -24,4 +24,5 @@ export interface RadioStation   {
     state: string;
     favicon: string;
     homepage: string;
+    urlcache: string;
 }
