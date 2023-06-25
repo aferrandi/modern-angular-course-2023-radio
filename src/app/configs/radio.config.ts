@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiRadio = axios.create({
-    baseURL: 'http://at1.api.radio-browser.info/json/'
+    baseURL: 'https://at1.api.radio-browser.info/json/'
 });
 
 apiRadio.interceptors.request.use((config: any) => {
